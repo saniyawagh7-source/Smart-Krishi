@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Krishi | AI-Assisted Precision Soil & Crop Intelligence</title>
+    
+    <!-- Modern Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,400&family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    
+    <!-- External Animation & Graphics Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <!-- Classy Germination Sprout Loader -->
+    <div id="loader">
+        <svg class="loader-sprout-svg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="45" stroke="rgba(52, 211, 153, 0.2)" stroke-width="2"/>
+            <path d="M50 82 V42" stroke="#10B981" stroke-width="4" stroke-linecap="round"/>
+            <path d="M50 55 C35 48 30 30 50 34" stroke="#34D399" stroke-width="3.5" stroke-linecap="round"/>
+            <path d="M50 46 C65 40 70 24 50 28" stroke="#F59E0B" stroke-width="3.5" stroke-linecap="round"/>
+            <circle cx="50" cy="84" r="3" fill="#F59E0B"/>
+        </svg>
+        <div class="loader-text">
+            <span>SMART KRISHI</span>
+            <span style="opacity: 0.6;">•</span>
+            <span style="color: var(--accent); font-size: 0.75rem;">NEURAL SOIL MATRIX</span>
+        </div>
+    </div>
+
+    <!-- 3D Living Biosphere WebGL Canvas -->
+    <canvas id="webgl-canvas"></canvas>
+
+    <!-- Floating Frosted Glass Navbar -->
+    <nav>
+        <a href="/" class="logo">
+            <div class="logo-sprout-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M7 20h10"/>
+                    <path d="M10 20c0-4 1.5-7 4-9 3.5 0 6 3 6 7"/>
+                    <path d="M4 14c2-4 6-5 8-4"/>
+                </svg>
+            </div>
+            <span>Smart<span style="color: var(--primary-light);">Krishi</span></span>
+        </a>
+
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="/crop_guide">Crop Intelligence</a>
+            <a href="/fertilizer_guide">Fertilizer Guide</a>
+            <a href="/about">Technology</a>
+            {% if session.get('user_id') %}
+                <a href="/dashboard">Dashboard</a>
+            {% endif %}
+        </div>
+
+        <div class="nav-controls">
+            <!-- Cursor Style Toggle -->
+            <button id="cursor-toggle" class="cursor-toggle-btn" aria-label="Toggle Cursor">✨</button>
+
+            {% if session.get('user_id') %}
+                <a href="/test" class="btn btn-primary" style="padding: 0.5rem 1.2rem; font-size: 0.85rem;">
+                    <span>+ New Test</span>
+                </a>
+                <a href="/logout" class="btn btn-outline" style="padding: 0.45rem 1rem; font-size: 0.82rem;">Logout</a>
+            {% else %}
+                <a href="/login" class="btn btn-outline" style="padding: 0.45rem 1.1rem; font-size: 0.85rem;">Login</a>
+                <a href="/register" class="btn btn-primary" style="padding: 0.5rem 1.25rem; font-size: 0.85rem;">Join Free</a>
+            {% endif %}
+        </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            <div style="position:fixed; top:95px; right:24px; z-index:99999; display: flex; flex-direction: column; gap: 10px;">
+            {% for category, message in messages %}
+              <div class="glass-card" style="padding: 0.9rem 1.5rem; border-left: 4px solid var(--{{ 'warn' if category=='error' else ('accent' if category=='warning' else 'primary') }}); box-shadow: 0 15px 35px rgba(0,0,0,0.5);">
+                  <strong style="color: #fff; margin-right: 0.5rem;">
+                      {{ '✓' if category=='success' else ('⚠️' if category=='warning' else 'ℹ️') }}
+                  </strong>
+                  {{ message }}
+              </div>
+            {% endfor %}
+            </div>
+          {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Modern Luxury Footer -->
+    <footer style="position: relative; z-index: 10; border-top: 1px solid var(--glass-border); background: rgba(7, 16, 9, 0.85); backdrop-filter: blur(20px); margin-top: 6rem; padding: 3.5rem 2rem 2rem 2rem;">
+        <div style="max-width: 1240px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 2rem;">
+            <div>
+                <div style="display: flex; align-items: center; gap: 0.6rem; font-size: 1.25rem; font-weight: 800; color: var(--text-main); font-family: 'Outfit', sans-serif;">
+                    <span style="color: var(--primary-light);">🌱 SmartKrishi</span>
+                </div>
+                <p class="card-desc" style="margin-top: 0.5rem; max-width: 420px; font-size: 0.88rem;">
+                    Sub-₹1,000 IoT soil sensor nodes & AI agronomy intelligence helping Indian farmers achieve optimal crop yield and sustainable fertilizer usage.
+                </p>
+            </div>
+            
+            <div style="display: flex; gap: 2.5rem; flex-wrap: wrap;">
+                <div>
+                    <h5 style="color: var(--primary-light); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.75rem;">Navigation</h5>
+                    <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.4rem; font-size: 0.88rem;">
+                        <li><a href="/" style="color: var(--text-muted); text-decoration: none;">Home</a></li>
+                        <li><a href="/crop_guide" style="color: var(--text-muted); text-decoration: none;">Crop Encyclopedia</a></li>
+                        <li><a href="/fertilizer_guide" style="color: var(--text-muted); text-decoration: none;">Fertilizer Guide</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h5 style="color: var(--primary-light); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.75rem;">Hardware</h5>
+                    <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.4rem; font-size: 0.88rem;">
+                        <li><a href="/about" style="color: var(--text-muted); text-decoration: none;">ESP32 Node Spec</a></li>
+                        <li><a href="/test" style="color: var(--text-muted); text-decoration: none;">Diagnostic Chamber</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div style="max-width: 1240px; margin: 2.5rem auto 0 auto; padding-top: 1.5rem; border-top: 1px solid rgba(52, 211, 153, 0.1); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; font-size: 0.82rem; color: var(--text-dim);">
+            <p>© 2026 Smart Krishi IoT System. Precision Agriculture for Sustainable India.</p>
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                <span class="dot active"></span>
+                <span style="color: var(--primary-light); font-family: 'Space Grotesk', monospace;">IoT Telemetry Node: Active</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="{{ url_for('static', filename='js/background3d.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/cursor.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

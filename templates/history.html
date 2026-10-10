@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container reveal">
+    <div style="display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 1rem; margin-bottom: 2rem;">
+        <div>
+            <span class="badge optimal" style="margin-bottom: 0.5rem;">Soil Diagnostics Archive</span>
+            <h2 style="margin: 0;">Historical Field Tests</h2>
+            <p class="subhead" style="margin-top: 0.25rem;">
+                Chronological ledger of previous soil sensor ingestions, nutrient profiles, and harvest recommendations.
+            </p>
+        </div>
+        <div>
+            <a href="/test" class="btn btn-primary" style="padding: 0.65rem 1.6rem; font-size: 0.88rem;">
+                <span>+ Run New Soil Test</span>
+            </a>
+        </div>
+    </div>
+
+    <div class="glass-card" style="padding: 1.5rem; overflow: hidden;">
+        <div style="overflow-x: auto;">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date & Time</th>
+                        <th>N - P - K Profile</th>
+                        <th>Soil pH</th>
+                        <th>Moisture</th>
+                        <th>Recommended Crop</th>
+                        <th style="text-align: right;">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for t in tests %}
+                    <tr>
+                        <td class="data-num" style="color: var(--text-muted); font-size: 0.9rem;">
+                            {{ t['created_at'].split(' ')[0] }}
+                        </td>
+                        <td>
+                            <span class="data-num" style="color: #fff; font-weight: 700;">
+                                {{ t['n'] }} <span style="color: var(--primary-light);">N</span> · 
+                                {{ t['p'] }} <span style="color: var(--accent);">P</span> · 
+                                {{ t['k'] }} <span style="color: var(--water);">K</span>
+                            </span>
+                        </td>
+                        <td>
+                            <span class="badge {{ 'optimal' if (t['ph'] >= 6.0 and t['ph'] <= 7.5) else 'medium' }}">
+                                pH {{ t['ph'] }}
+                            </span>
+                        </td>
+                        <td class="data-num" style="color: var(--water); font-size: 1.05rem;">
+                            {{ t['moisture'] }}%
+                        </td>
+                        <td>
+                            <strong class="crop-name" style="color: #fff; font-size: 1.1rem;">
+                                {{ t['crop_name'] }}
+                            </strong>
+                        </td>
+                        <td style="text-align: right;">
+                            <a href="/result/{{ t['id'] }}" class="btn btn-outline" style="padding: 0.35rem 1rem; font-size: 0.82rem; border-color: var(--primary); color: var(--primary-light);">
+                                <span>View Dossier →</span>
+                            </a>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="6" class="text-center" style="padding: 4rem 1rem;">
+                            <div style="font-size: 2.5rem; margin-bottom: 0.75rem;">🌱</div>
+                            <h4 style="color: #fff; margin-bottom: 0.5rem;">No Soil Tests Recorded Yet</h4>
+                            <p class="card-desc mb-2" style="max-width: 450px; margin-left: auto; margin-right: auto;">
+                                Connect your ESP32 probe or enter your soil lab test results to start tracking historical fertility.
+                            </p>
+                            <a href="/test" class="btn btn-primary" style="padding: 0.75rem 2rem;">
+                                <span>Start Your First Test</span>
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

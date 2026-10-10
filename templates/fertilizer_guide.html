@@ -1,0 +1,155 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container reveal">
+    <div style="max-width: 960px; margin: 0 auto;">
+        <!-- Header -->
+        <div class="text-center mb-3">
+            <span class="badge optimal mb-1">Agronomy Fundamentals</span>
+            <h2>Complete Fertilizer Intelligence Guide</h2>
+            <p class="subhead" style="margin: 0 auto;">
+                Mastering the balance of Nitrogen, Phosphorus, and Potassium for maximum vegetative vitality and soil longevity.
+            </p>
+        </div>
+
+        <!-- Nitrogen (N) Card -->
+        <div class="glass-card mb-2" style="border-left: 5px solid #10B981; background: linear-gradient(135deg, rgba(16, 185, 129, 0.08) 0%, rgba(11, 26, 16, 0.8) 100%);">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 1rem;">
+                <div style="display: flex; align-items: center; gap: 0.75rem;">
+                    <div style="width: 44px; height: 44px; border-radius: 12px; background: rgba(16, 185, 129, 0.2); border: 1px solid #10B981; display: flex; align-items: center; justify-content: center; font-size: 1.3rem;">
+                        🍃
+                    </div>
+                    <div>
+                        <h3 style="margin: 0; color: #fff;">Nitrogen (N) — Vegetative Growth & Canopy</h3>
+                        <p class="card-desc" style="margin: 0; color: var(--primary-light);">Primary driver of chlorophyll and cellular division</p>
+                    </div>
+                </div>
+                <span class="badge optimal">Primary Macronutrient</span>
+            </div>
+            
+            <p class="card-desc" style="color: #E2E8F0;">
+                Nitrogen is a foundational constituent of amino acids, proteins, and chlorophyll. It drives robust vegetative shoot development, deep green foliage, and photosynthetic biomass accumulation.
+            </p>
+
+            <div class="grid-2 mt-1" style="gap: 1rem;">
+                <div style="background: rgba(8, 20, 12, 0.65); padding: 1rem; border-radius: var(--radius-md); border: 1px solid var(--glass-border);">
+                    <strong style="color: var(--warn); display: flex; align-items: center; gap: 0.4rem; font-size: 0.9rem;">
+                        <span>⚠️ Deficiency Symptoms:</span>
+                    </strong>
+                    <p class="card-desc" style="font-size: 0.85rem; margin-top: 0.35rem;">
+                        Chlorosis (yellowing) starting on older lower leaves, stunted shoots, and premature defoliation.
+                    </p>
+                </div>
+                <div style="background: rgba(8, 20, 12, 0.65); padding: 1rem; border-radius: var(--radius-md); border: 1px solid var(--glass-border);">
+                    <strong style="color: var(--primary-light); display: flex; align-items: center; gap: 0.4rem; font-size: 0.9rem;">
+                        <span>🧪 Common Commercial Source:</span>
+                    </strong>
+                    <p class="card-desc" style="font-size: 0.85rem; margin-top: 0.35rem;">
+                        <strong>Urea [46% N]</strong> — High solubility, applied in split doses to minimize leaching into groundwater.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Phosphorus (P) Card -->
+        <div class="glass-card mb-2" style="border-left: 5px solid #F59E0B; background: linear-gradient(135deg, rgba(245, 158, 11, 0.08) 0%, rgba(11, 26, 16, 0.8) 100%);">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 1rem;">
+                <div style="display: flex; align-items: center; gap: 0.75rem;">
+                    <div style="width: 44px; height: 44px; border-radius: 12px; background: rgba(245, 158, 11, 0.2); border: 1px solid #F59E0B; display: flex; align-items: center; justify-content: center; font-size: 1.3rem;">
+                        🌱
+                    </div>
+                    <div>
+                        <h3 style="margin: 0; color: #fff;">Phosphorus (P) — Root Architecture & Flowering</h3>
+                        <p class="card-desc" style="margin: 0; color: var(--accent-light);">Energy transfer (ATP) and reproductive organ development</p>
+                    </div>
+                </div>
+                <span class="badge medium">Root Catalyst</span>
+            </div>
+
+            <p class="card-desc" style="color: #E2E8F0;">
+                Phosphorus stimulates early root elongation, enabling plants to tap moisture during dry spells. It accelerates flowering, seed set, and crop maturity while fortifying cell walls against lodging.
+            </p>
+
+            <div class="grid-2 mt-1" style="gap: 1rem;">
+                <div style="background: rgba(8, 20, 12, 0.65); padding: 1rem; border-radius: var(--radius-md); border: 1px solid var(--glass-border);">
+                    <strong style="color: var(--warn); display: flex; align-items: center; gap: 0.4rem; font-size: 0.9rem;">
+                        <span>⚠️ Deficiency Symptoms:</span>
+                    </strong>
+                    <p class="card-desc" style="font-size: 0.85rem; margin-top: 0.35rem;">
+                        Purplish or dark bronze discoloration along leaf margins, severely retarded root expansion.
+                    </p>
+                </div>
+                <div style="background: rgba(8, 20, 12, 0.65); padding: 1rem; border-radius: var(--radius-md); border: 1px solid var(--glass-border);">
+                    <strong style="color: var(--accent-light); display: flex; align-items: center; gap: 0.4rem; font-size: 0.9rem;">
+                        <span>🧪 Common Commercial Source:</span>
+                    </strong>
+                    <p class="card-desc" style="font-size: 0.85rem; margin-top: 0.35rem;">
+                        <strong>DAP (Di-Ammonium Phosphate) [18% N, 46% P2O5]</strong> — Placed in seed furrow at sowing.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Potassium (K) Card -->
+        <div class="glass-card mb-2" style="border-left: 5px solid #0EA5E9; background: linear-gradient(135deg, rgba(14, 165, 233, 0.08) 0%, rgba(11, 26, 16, 0.8) 100%);">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 1rem;">
+                <div style="display: flex; align-items: center; gap: 0.75rem;">
+                    <div style="width: 44px; height: 44px; border-radius: 12px; background: rgba(14, 165, 233, 0.2); border: 1px solid #0EA5E9; display: flex; align-items: center; justify-content: center; font-size: 1.3rem;">
+                        🛡️
+                    </div>
+                    <div>
+                        <h3 style="margin: 0; color: #fff;">Potassium (K) — Stress Resistance & Grain Plumpness</h3>
+                        <p class="card-desc" style="margin: 0; color: var(--water);">Regulates stomata opening, water balance, and disease immunity</p>
+                    </div>
+                </div>
+                <span class="badge" style="background: rgba(14, 165, 233, 0.15); color: var(--water);">Immunity & Quality</span>
+            </div>
+
+            <p class="card-desc" style="color: #E2E8F0;">
+                Potassium regulates osmotic pressure in plant cells, ensuring efficient water conservation during drought. It strengthens stems to prevent lodging and bolsters fruit weight, oil content, and shelf life.
+            </p>
+
+            <div class="grid-2 mt-1" style="gap: 1rem;">
+                <div style="background: rgba(8, 20, 12, 0.65); padding: 1rem; border-radius: var(--radius-md); border: 1px solid var(--glass-border);">
+                    <strong style="color: var(--warn); display: flex; align-items: center; gap: 0.4rem; font-size: 0.9rem;">
+                        <span>⚠️ Deficiency Symptoms:</span>
+                    </strong>
+                    <p class="card-desc" style="font-size: 0.85rem; margin-top: 0.35rem;">
+                        "Tip burn" and marginal necrosis (scorched edges) on older leaves, weak lodging-prone stems.
+                    </p>
+                </div>
+                <div style="background: rgba(8, 20, 12, 0.65); padding: 1rem; border-radius: var(--radius-md); border: 1px solid var(--glass-border);">
+                    <strong style="color: var(--water); display: flex; align-items: center; gap: 0.4rem; font-size: 0.9rem;">
+                        <span>🧪 Common Commercial Source:</span>
+                    </strong>
+                    <p class="card-desc" style="font-size: 0.85rem; margin-top: 0.35rem;">
+                        <strong>MOP (Muriate of Potash) [60% K2O]</strong> — Incorporate into soil bed during land preparation.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Soil Organic Matter Card -->
+        <div class="glass-card mb-2" style="border: 1px solid var(--glass-border-bright);">
+            <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem;">
+                <span style="font-size: 1.5rem;">🪱</span>
+                <h3 style="margin: 0; color: #fff;">The Irreplaceable Role of Soil Organic Matter (SOM)</h3>
+            </div>
+            <p class="card-desc" style="color: #CBD5E1;">
+                Chemical fertilizers feed the current crop, but <strong>Organic Matter (FYM, Vermicompost, Green Manure)</strong> feeds the soil biology. Organic carbon multiplies beneficial mycorrhizal fungi, boosts Cation Exchange Capacity (CEC), prevents nutrient lockout, and doubles water holding capacity.
+            </p>
+            <div style="margin-top: 1rem; padding: 1rem; background: rgba(16, 185, 129, 0.1); border-radius: var(--radius-md); border-left: 3px solid var(--primary-light);">
+                <strong style="color: var(--primary-light);">Golden Agronomic Rule:</strong>
+                <span class="card-desc" style="color: #fff; margin-left: 0.4rem;">
+                    Always combine mineral N-P-K applications with 2–5 tonnes of well-rotted FYM or vermicompost per acre before sowing.
+                </span>
+            </div>
+        </div>
+
+        <div class="text-center mt-3">
+            <a href="/test" class="btn btn-primary" style="padding: 0.85rem 2.2rem;">
+                <span>Test Your Soil N-P-K Levels Now</span>
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

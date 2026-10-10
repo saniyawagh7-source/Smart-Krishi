@@ -1,0 +1,352 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container reveal" style="max-width: 1040px;">
+    <!-- Header -->
+    <div style="display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 1.5rem; margin-bottom: 2rem;">
+        <div>
+            <span class="badge optimal" style="margin-bottom: 0.5rem;">Soil Diagnostic Chamber</span>
+            <h2 style="margin: 0;">Precision Soil Ingestion</h2>
+            <p class="subhead" style="margin-top: 0.25rem;">
+                Acquire soil characteristics via our ESP32 IoT sensor node or manual agricultural test kit.
+            </p>
+        </div>
+        
+        <!-- Mode Switcher Tabs -->
+        <div style="background: rgba(11, 26, 16, 0.9); border: 1px solid var(--glass-border); padding: 0.35rem; border-radius: var(--radius-full); display: flex; gap: 0.35rem;">
+            <button type="button" id="tab-sensor" class="btn btn-outline" style="padding: 0.5rem 1.4rem; font-size: 0.85rem; border-radius: var(--radius-full); border: none;">
+                <span>📡 ESP32 IoT Sensor</span>
+            </button>
+            <button type="button" id="tab-manual" class="btn btn-primary" style="padding: 0.5rem 1.4rem; font-size: 0.85rem; border-radius: var(--radius-full);">
+                <span>🧪 Manual Lab Kit</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Hidden source toggle for form logic -->
+    <select id="sensor-toggle" style="display: none;">
+        <option value="manual">manual</option>
+        <option value="sensor">sensor</option>
+    </select>
+
+    <!-- FORM START -->
+    <form method="POST" id="soil-form">
+        <input type="hidden" name="source" id="source-input" value="Manual">
+
+        <!-- IOT SENSOR LIVE CHAMBER (Visible when IoT mode selected) -->
+        <div id="sensor-ui" style="display: none;" class="mb-3">
+            <div class="glass-card soil-scanner-card" style="border: 1px solid var(--glass-border-bright); background: rgba(11, 26, 16, 0.85);">
+                <div class="scanline-bar"></div>
+
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.5rem;">
+                    <div style="display: flex; align-items: center; gap: 0.75rem;">
+                        <div class="dot active"></div>
+                        <div>
+                            <h4 style="margin: 0; font-size: 1.1rem; color: #fff;">ESP32 Diagnostic Probe Receiver</h4>
+                            <p class="card-desc" style="margin: 0; font-size: 0.8rem; color: var(--primary-light);">
+                                Channel: demo_key • Signal Strength: -62 dBm
+                            </p>
+                        </div>
+                    </div>
+                    <span id="sensor-status-pill" class="badge optimal">Ready for Ingestion</span>
+                </div>
+
+                <!-- Live Circular Telemetry Dials -->
+                <div class="grid-3" style="gap: 1.5rem; margin-bottom: 1.75rem;">
+                    <!-- Moisture Dial -->
+                    <div class="glass-card text-center" style="padding: 1.5rem 1rem; background: rgba(14, 165, 233, 0.05); border-color: rgba(14, 165, 233, 0.2);">
+                        <p class="card-desc" style="color: var(--water); font-size: 0.85rem; font-weight: 600; margin-bottom: 0.75rem;">SOIL MOISTURE</p>
+                        <div class="circle-gauge" id="gauge-moisture-circle" data-percent="45" style="margin: 0 auto;">
+                            <svg viewBox="0 0 100 100">
+                                <circle class="circle-bg" cx="50" cy="50" r="45"></circle>
+                                <circle class="circle-bar" cx="50" cy="50" r="45" style="stroke: var(--water);"></circle>
+                            </svg>
+                            <div class="circle-gauge-text">
+                                <span class="data-num" style="font-size: 1.5rem; color: #fff;" id="val-m">45</span>
+                                <span style="font-size: 0.75rem; color: var(--water);">%</span>
+                            </div>
+                        </div>
+                        <p class="card-desc" style="font-size: 0.75rem; margin-top: 0.5rem;">Capacitive v1.2</p>
+                    </div>
+
+                    <!-- pH Dial -->
+                    <div class="glass-card text-center" style="padding: 1.5rem 1rem; background: rgba(16, 185, 129, 0.05); border-color: rgba(16, 185, 129, 0.2);">
+                        <p class="card-desc" style="color: var(--primary-light); font-size: 0.85rem; font-weight: 600; margin-bottom: 0.75rem;">pH ACIDITY</p>
+                        <div class="circle-gauge" id="gauge-ph-circle" data-percent="48" style="margin: 0 auto;">
+                            <svg viewBox="0 0 100 100">
+                                <circle class="circle-bg" cx="50" cy="50" r="45"></circle>
+                                <circle class="circle-bar" cx="50" cy="50" r="45" style="stroke: var(--primary);"></circle>
+                            </svg>
+                            <div class="circle-gauge-text">
+                                <span class="data-num" style="font-size: 1.5rem; color: #fff;" id="val-ph">6.8</span>
+                                <span style="font-size: 0.75rem; color: var(--primary-light);">pH</span>
+                            </div>
+                        </div>
+                        <p class="card-desc" style="font-size: 0.75rem; margin-top: 0.5rem;">Glass Electrode ADC</p>
+                    </div>
+
+                    <!-- Temperature Dial -->
+                    <div class="glass-card text-center" style="padding: 1.5rem 1rem; background: rgba(245, 158, 11, 0.05); border-color: rgba(245, 158, 11, 0.2);">
+                        <p class="card-desc" style="color: var(--accent); font-size: 0.85rem; font-weight: 600; margin-bottom: 0.75rem;">SOIL TEMP</p>
+                        <div class="circle-gauge" id="gauge-temp-circle" data-percent="50" style="margin: 0 auto;">
+                            <svg viewBox="0 0 100 100">
+                                <circle class="circle-bg" cx="50" cy="50" r="45"></circle>
+                                <circle class="circle-bar" cx="50" cy="50" r="45" style="stroke: var(--accent);"></circle>
+                            </svg>
+                            <div class="circle-gauge-text">
+                                <span class="data-num" style="font-size: 1.5rem; color: #fff;" id="val-temp">26.5</span>
+                                <span style="font-size: 0.75rem; color: var(--accent);">°C</span>
+                            </div>
+                        </div>
+                        <p class="card-desc" style="font-size: 0.75rem; margin-top: 0.5rem;">DS18B20 1-Wire</p>
+                    </div>
+                </div>
+
+                <!-- Action Button for IoT Fetch -->
+                <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                    <button type="button" id="fetch-sensor" class="btn btn-primary btn-shimmer" style="padding: 0.85rem 2.2rem;">
+                        <span>📡 Fetch Latest Sensor Buffer</span>
+                    </button>
+                    <button type="button" id="mock-sensor-btn" class="btn btn-outline" style="padding: 0.85rem 1.6rem;">
+                        <span>⚡ Run IoT Hardware Pulse</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- SOIL NUTRIENTS & ENVIRONMENT PARAMETERS -->
+        <div class="grid-2">
+            <!-- Soil Nutrients (NPK) -->
+            <div class="glass-card">
+                <div style="display: flex; align-items: center; gap: 0.6rem; margin-bottom: 1.25rem;">
+                    <div style="width: 32px; height: 32px; border-radius: 8px; background: rgba(16, 185, 129, 0.15); border: 1px solid var(--primary); display: flex; align-items: center; justify-content: center; color: var(--primary-light);">
+                        🌿
+                    </div>
+                    <div>
+                        <h3 style="margin: 0; font-size: 1.25rem;">Soil Nutrients</h3>
+                        <p class="card-desc" style="font-size: 0.8rem; margin: 0;">Macronutrients in kg per hectare</p>
+                    </div>
+                </div>
+
+                <!-- Nitrogen Input -->
+                <div class="form-group">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem;">
+                        <label style="margin: 0; font-weight: 600;">Nitrogen (N)</label>
+                        <span class="badge" style="background: rgba(16, 185, 129, 0.15); color: var(--primary-light);">Typical: 100-600</span>
+                    </div>
+                    <div style="position: relative;">
+                        <input type="number" step="0.1" name="n" id="n-input" value="140" required placeholder="e.g. 140">
+                        <span style="position: absolute; right: 14px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 0.85rem; font-family: 'Space Grotesk', monospace;">kg/ha</span>
+                    </div>
+                </div>
+
+                <!-- Phosphorus Input -->
+                <div class="form-group">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem;">
+                        <label style="margin: 0; font-weight: 600;">Phosphorus (P)</label>
+                        <span class="badge" style="background: rgba(245, 158, 11, 0.15); color: var(--accent-light);">Typical: 10-75</span>
+                    </div>
+                    <div style="position: relative;">
+                        <input type="number" step="0.1" name="p" id="p-input" value="45" required placeholder="e.g. 45">
+                        <span style="position: absolute; right: 14px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 0.85rem; font-family: 'Space Grotesk', monospace;">kg/ha</span>
+                    </div>
+                </div>
+
+                <!-- Potassium Input -->
+                <div class="form-group">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem;">
+                        <label style="margin: 0; font-weight: 600;">Potassium (K)</label>
+                        <span class="badge" style="background: rgba(14, 165, 233, 0.15); color: var(--water);">Typical: 100-400</span>
+                    </div>
+                    <div style="position: relative;">
+                        <input type="number" step="0.1" name="k" id="k-input" value="50" required placeholder="e.g. 50">
+                        <span style="position: absolute; right: 14px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 0.85rem; font-family: 'Space Grotesk', monospace;">kg/ha</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Environmental Factors -->
+            <div class="glass-card">
+                <div style="display: flex; align-items: center; gap: 0.6rem; margin-bottom: 1.25rem;">
+                    <div style="width: 32px; height: 32px; border-radius: 8px; background: rgba(14, 165, 233, 0.15); border: 1px solid var(--water); display: flex; align-items: center; justify-content: center; color: var(--water);">
+                        ⛅
+                    </div>
+                    <div>
+                        <h3 style="margin: 0; font-size: 1.25rem;">Environment & Field</h3>
+                        <p class="card-desc" style="font-size: 0.8rem; margin: 0;">Soil pH, moisture, and ambient warmth</p>
+                    </div>
+                </div>
+
+                <!-- pH Input -->
+                <div class="form-group">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem;">
+                        <label style="margin: 0; font-weight: 600;">Soil pH Index</label>
+                        <span class="badge optimal">Neutral: 6.0 - 7.5</span>
+                    </div>
+                    <div style="position: relative;">
+                        <input type="number" step="0.1" min="0" max="14" name="ph" id="ph-input" value="6.8" required placeholder="7.0">
+                        <span style="position: absolute; right: 14px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 0.85rem; font-family: 'Space Grotesk', monospace;">pH (0-14)</span>
+                    </div>
+                </div>
+
+                <!-- Moisture Input -->
+                <div class="form-group">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem;">
+                        <label style="margin: 0; font-weight: 600;">Soil Moisture</label>
+                        <span class="badge" style="background: rgba(14, 165, 233, 0.15); color: var(--water);">Optimal: 40-70%</span>
+                    </div>
+                    <div style="position: relative;">
+                        <input type="number" step="1" min="0" max="100" name="moisture" id="m-input" value="55" required placeholder="50">
+                        <span style="position: absolute; right: 14px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 0.85rem; font-family: 'Space Grotesk', monospace;">% saturation</span>
+                    </div>
+                </div>
+
+                <!-- Temperature Input -->
+                <div class="form-group">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem;">
+                        <label style="margin: 0; font-weight: 600;">Root Temperature</label>
+                        <span class="badge" style="background: rgba(245, 158, 11, 0.15); color: var(--accent);">Average: 20-35°C</span>
+                    </div>
+                    <div style="position: relative;">
+                        <input type="number" step="0.1" name="temperature" id="t-input" value="26.0" required placeholder="25.0">
+                        <span style="position: absolute; right: 14px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 0.85rem; font-family: 'Space Grotesk', monospace;">°C</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Big Action Submission Button -->
+        <div class="text-center mt-3">
+            <button type="submit" class="btn btn-primary btn-shimmer" style="font-size: 1.15rem; padding: 1.15rem 3.5rem;">
+                <span>🔬 Analyze Soil & Generate Crop Dossier</span>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </button>
+            <p class="card-desc mt-1" style="font-size: 0.82rem;">
+                Neural Agronomy cross-checks with 20 Indian agro-climates • Instant PDF / Print Report
+            </p>
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Tab Segmented Switcher Logic
+    const tabSensor = document.getElementById('tab-sensor');
+    const tabManual = document.getElementById('tab-manual');
+    const sensorUI = document.getElementById('sensor-ui');
+    const sourceInput = document.getElementById('source-input');
+    const sensorToggle = document.getElementById('sensor-toggle');
+
+    function setMode(mode) {
+        if (mode === 'sensor') {
+            tabSensor.className = 'btn btn-primary';
+            tabManual.className = 'btn btn-outline';
+            sensorUI.style.display = 'block';
+            sourceInput.value = 'IoT Sensor';
+            sensorToggle.value = 'sensor';
+            showToast('📡 Switched to ESP32 IoT Sensor Mode');
+        } else {
+            tabManual.className = 'btn btn-primary';
+            tabSensor.className = 'btn btn-outline';
+            sensorUI.style.display = 'none';
+            sourceInput.value = 'Manual';
+            sensorToggle.value = 'manual';
+            showToast('🧪 Switched to Manual Lab Kit Mode');
+        }
+    }
+
+    tabSensor.addEventListener('click', () => setMode('sensor'));
+    tabManual.addEventListener('click', () => setMode('manual'));
+
+    // Fetch and Mock Sensor Logic
+    const fetchBtn = document.getElementById('fetch-sensor');
+    const mockBtn = document.getElementById('mock-sensor-btn');
+    const chamberCard = document.querySelector('.soil-scanner-card');
+
+    function updateDials(moisture, ph, temp) {
+        // Update dials
+        document.getElementById('val-m').innerText = Math.round(moisture);
+        document.getElementById('val-ph').innerText = ph.toFixed(1);
+        document.getElementById('val-temp').innerText = temp.toFixed(1);
+
+        const mBar = document.querySelector('#gauge-moisture-circle .circle-bar');
+        const phBar = document.querySelector('#gauge-ph-circle .circle-bar');
+        const tBar = document.querySelector('#gauge-temp-circle .circle-bar');
+
+        const circ = 2 * Math.PI * 45;
+        if (mBar) mBar.style.strokeDashoffset = `${circ - (moisture / 100) * circ}`;
+        if (phBar) phBar.style.strokeDashoffset = `${circ - (ph / 14) * circ}`;
+        if (tBar) tBar.style.strokeDashoffset = `${circ - (temp / 50) * circ}`;
+    }
+
+    // Ingest data into input elements
+    function populateInputs(data) {
+        document.getElementById('n-input').value = data.n.toFixed(1);
+        document.getElementById('p-input').value = data.p.toFixed(1);
+        document.getElementById('k-input').value = data.k.toFixed(1);
+        document.getElementById('ph-input').value = data.ph.toFixed(1);
+        document.getElementById('m-input').value = Math.round(data.moisture);
+        document.getElementById('t-input').value = data.temperature.toFixed(1);
+
+        updateDials(data.moisture, data.ph, data.temperature);
+
+        // Flash inputs briefly
+        document.querySelectorAll('#soil-form input[type="number"]').forEach(input => {
+            input.style.borderColor = 'var(--primary)';
+            input.style.boxShadow = '0 0 15px var(--primary-glow)';
+            setTimeout(() => {
+                input.style.borderColor = '';
+                input.style.boxShadow = '';
+            }, 1000);
+        });
+    }
+
+    if (fetchBtn) {
+        fetchBtn.addEventListener('click', () => {
+            fetchBtn.innerText = 'Scanning Sensor Stream...';
+            if (chamberCard) chamberCard.classList.add('scanning');
+
+            fetch('/api/sensor/latest')
+                .then(r => r.json())
+                .then(data => {
+                    if (chamberCard) chamberCard.classList.remove('scanning');
+                    fetchBtn.innerText = '📡 Fetch Latest Sensor Buffer';
+
+                    if (data.status === 'no_data') {
+                        showToast('⚠️ No live ESP32 buffer found. Try "Run IoT Hardware Pulse".');
+                    } else {
+                        populateInputs(data);
+                        showToast('✓ ESP32 soil data synced successfully!');
+                    }
+                })
+                .catch(() => {
+                    if (chamberCard) chamberCard.classList.remove('scanning');
+                    fetchBtn.innerText = '📡 Fetch Latest Sensor Buffer';
+                    showToast('⚠️ Could not connect to API. Triggering simulated pulse.');
+                    triggerMockPulse();
+                });
+        });
+    }
+
+    function triggerMockPulse() {
+        if (chamberCard) chamberCard.classList.add('scanning');
+        setTimeout(() => {
+            if (chamberCard) chamberCard.classList.remove('scanning');
+            const mock = {
+                n: 135 + Math.random() * 20,
+                p: 45 + Math.random() * 15,
+                k: 50 + Math.random() * 20,
+                ph: 6.5 + Math.random() * 0.8,
+                moisture: 50 + Math.random() * 20,
+                temperature: 24 + Math.random() * 6
+            };
+            populateInputs(mock);
+            showToast('✓ Real-time IoT sensor telemetry ingested!');
+        }, 800);
+    }
+
+    if (mockBtn) {
+        mockBtn.addEventListener('click', triggerMockPulse);
+    }
+</script>
+{% endblock %}

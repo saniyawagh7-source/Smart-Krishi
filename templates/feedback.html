@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container reveal" style="max-width: 620px; min-height: 80vh; display: flex; align-items: center; justify-content: center;">
+    <div class="glass-card" style="width: 100%; border: 1px solid var(--glass-border-bright); background: rgba(11, 26, 16, 0.88);">
+        <!-- Header -->
+        <div class="text-center mb-2">
+            <div style="width: 54px; height: 54px; border-radius: 16px; background: rgba(245, 158, 11, 0.15); border: 1px solid var(--accent); display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem auto; font-size: 1.5rem; color: var(--accent);">
+                ⭐
+            </div>
+            <h2 style="margin: 0; font-size: 2rem;">Agronomy Feedback</h2>
+            <p class="card-desc" style="margin-top: 0.35rem;">Help improve Smart Krishi crop models for Indian agro-climates</p>
+        </div>
+        
+        <form method="POST">
+            <input type="hidden" name="test_id" value="{{ test_id }}">
+            
+            <div class="form-group">
+                <label>Was this crop & fertilizer recommendation accurate for your land?</label>
+                <select name="useful">
+                    <option value="Yes">✓ Highly accurate & practical</option>
+                    <option value="Partly">⚠️ Partly accurate / Minor deviations</option>
+                    <option value="No">❌ Inaccurate for my region</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>Overall Experience Rating (1 to 5 Stars)</label>
+                <input type="range" name="rating" min="1" max="5" value="5" style="width: 100%; margin-top: 0.5rem;" oninput="document.getElementById('rating-val').innerText = '★'.repeat(this.value) + '☆'.repeat(5 - this.value) + ' (' + this.value + ' / 5)'">
+                <p class="text-center data-num mt-1" style="font-size: 1.3rem; color: var(--accent); margin: 0.5rem 0 0 0;">
+                    <span id="rating-val">★★★★★ (5 / 5)</span>
+                </p>
+            </div>
+            
+            <div class="form-group">
+                <label>Field Observations or Farmer Feedback (Optional)</label>
+                <textarea name="comment" rows="4" placeholder="Tell us about your soil type, local irrigation issues, or seed germination success..."></textarea>
+            </div>
+            
+            <button type="submit" class="btn btn-primary btn-shimmer" style="width: 100%; padding: 0.95rem; font-size: 1rem; margin-top: 0.5rem; justify-content: center;">
+                <span>Submit Feedback & Return to Cockpit →</span>
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}

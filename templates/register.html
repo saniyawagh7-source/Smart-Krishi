@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container" style="max-width: 540px; min-height: 80vh; display: flex; align-items: center; justify-content: center;">
+    <div class="glass-card reveal" style="width: 100%; border: 1px solid var(--glass-border-bright); background: rgba(11, 26, 16, 0.88);">
+        <!-- Header -->
+        <div class="text-center mb-2">
+            <div style="width: 54px; height: 54px; border-radius: 16px; background: rgba(16, 185, 129, 0.15); border: 1px solid var(--primary); display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem auto; font-size: 1.5rem; color: var(--primary-light);">
+                🌾
+            </div>
+            <h2 style="margin: 0; font-size: 2rem;">Farmer Registration</h2>
+            <p class="card-desc" style="margin-top: 0.35rem;">Join thousands of Indian farmers using Smart Krishi</p>
+        </div>
+        
+        <form method="POST">
+            <div class="form-group">
+                <label>Full Name</label>
+                <input type="text" name="name" required placeholder="e.g. Rajesh Patil">
+            </div>
+            <div class="form-group">
+                <label>Mobile Number or Email</label>
+                <input type="text" name="contact" required placeholder="e.g. 9876543210">
+            </div>
+            <div class="form-group">
+                <label>Village, District & State</label>
+                <input type="text" name="location" required placeholder="e.g. Baramati, Pune, Maharashtra">
+            </div>
+            <div class="form-group">
+                <label>Create Secure Password</label>
+                <input type="password" name="password" required placeholder="••••••••">
+            </div>
+            
+            <button type="submit" class="btn btn-primary btn-shimmer" style="width: 100%; padding: 0.95rem; font-size: 1rem; margin-top: 0.5rem; justify-content: center;">
+                <span>Complete Free Registration →</span>
+            </button>
+        </form>
+
+        <div style="margin-top: 1.5rem; padding-top: 1.25rem; border-top: 1px solid rgba(255, 255, 255, 0.08); text-align: center;">
+            <p class="card-desc" style="margin: 0;">
+                Already registered? 
+                <a href="/login" style="color: var(--primary-light); text-decoration: none; font-weight: 700; margin-left: 0.25rem;">
+                    Sign In
+                </a>
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}

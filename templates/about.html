@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container reveal">
+    <div style="max-width: 980px; margin: 0 auto;">
+        <!-- Header -->
+        <div class="text-center mb-3">
+            <span class="badge optimal mb-1">Open AgriTech Innovation</span>
+            <h2>Democratizing Precision Farming</h2>
+            <p class="subhead" style="margin: 0 auto;">
+                Bridging traditional agricultural wisdom with accessible IoT hardware designed specifically for Indian smallholder farmers.
+            </p>
+        </div>
+
+        <!-- Vision Quote Card -->
+        <div class="glass-card mb-3 text-center" style="border: 1px solid var(--glass-border-bright); background: radial-gradient(circle at center, rgba(16, 185, 129, 0.1) 0%, rgba(11, 26, 16, 0.85) 80%);">
+            <span style="font-size: 2.5rem; color: var(--primary-light);">“</span>
+            <h3 style="font-size: 1.8rem; font-weight: 700; color: #fff; max-width: 780px; margin: -1rem auto 1rem auto; line-height: 1.3;">
+                High-yield agriculture shouldn't require ₹50,000 corporate sensor packages. With open hardware and intelligent agronomy algorithms, every farmer can cultivate with precision.
+            </h3>
+            <p class="card-desc" style="color: var(--primary-light); font-weight: 600;">
+                — The Smart Krishi Engineering Mission
+            </p>
+        </div>
+
+        <!-- Hardware Bill of Materials (BOM) Section -->
+        <h3 class="mb-1">The Sub-₹1,000 Hardware Architecture</h3>
+        <p class="card-desc mb-2">
+            Industrial RS485 soil probes frequently cost ₹4,000 to ₹10,000, making them completely inaccessible. Smart Krishi's prototype node utilizes off-the-shelf, resilient components achieving high diagnostic accuracy for under ₹1,000.
+        </p>
+
+        <div class="grid-3 mb-3">
+            <div class="glass-card">
+                <span style="font-size: 1.8rem;">📟</span>
+                <h4 style="margin: 0.5rem 0 0.2rem 0; color: #fff;">ESP32 Dev Board</h4>
+                <p class="card-desc" style="font-size: 0.85rem; margin-bottom: 0.75rem;">Wi-Fi + BLE dual core microcontroller for wireless telemetry</p>
+                <p class="data-num" style="color: var(--accent); font-size: 1.3rem;">₹350</p>
+            </div>
+
+            <div class="glass-card">
+                <span style="font-size: 1.8rem;">💧</span>
+                <h4 style="margin: 0.5rem 0 0.2rem 0; color: #fff;">Capacitive Moisture</h4>
+                <p class="card-desc" style="font-size: 0.85rem; margin-bottom: 0.75rem;">Corrosion-resistant capacitive dielectric sensor</p>
+                <p class="data-num" style="color: var(--water); font-size: 1.3rem;">₹150</p>
+            </div>
+
+            <div class="glass-card">
+                <span style="font-size: 1.8rem;">🧪</span>
+                <h4 style="margin: 0.5rem 0 0.2rem 0; color: #fff;">Analog pH Module</h4>
+                <p class="card-desc" style="font-size: 0.85rem; margin-bottom: 0.75rem;">Electrode probe for soil acidity and alkalinity detection</p>
+                <p class="data-num" style="color: var(--primary-light); font-size: 1.3rem;">₹300</p>
+            </div>
+
+            <div class="glass-card">
+                <span style="font-size: 1.8rem;">🌡️</span>
+                <h4 style="margin: 0.5rem 0 0.2rem 0; color: #fff;">DS18B20 Temp Probe</h4>
+                <p class="card-desc" style="font-size: 0.85rem; margin-bottom: 0.75rem;">Waterproof 1-wire stainless steel subsoil temperature probe</p>
+                <p class="data-num" style="color: var(--accent); font-size: 1.3rem;">₹100</p>
+            </div>
+
+            <div class="glass-card">
+                <span style="font-size: 1.8rem;">🔌</span>
+                <h4 style="margin: 0.5rem 0 0.2rem 0; color: #fff;">Wires & Enclosure</h4>
+                <p class="card-desc" style="font-size: 0.85rem; margin-bottom: 0.75rem;">Weatherproof junction box, jumpers, and USB power lead</p>
+                <p class="data-num" style="color: var(--text-muted); font-size: 1.3rem;">₹100</p>
+            </div>
+
+            <div class="glass-card" style="border: 1px solid var(--primary); background: rgba(16, 185, 129, 0.15);">
+                <span style="font-size: 1.8rem;">🏆</span>
+                <h4 style="margin: 0.5rem 0 0.2rem 0; color: #fff;">Total Node Budget</h4>
+                <p class="card-desc" style="font-size: 0.85rem; margin-bottom: 0.75rem;">Complete standalone wireless agricultural IoT probe</p>
+                <p class="data-num" style="color: var(--primary-light); font-size: 1.6rem; font-weight: 800;">₹1,000</p>
+            </div>
+        </div>
+
+        <!-- System Architecture Flow Pipeline -->
+        <h3 class="mb-1">End-to-End System Pipeline</h3>
+        <div class="glass-card mb-3" style="padding: 2.5rem 2rem;">
+            <div class="grid-4 text-center" style="gap: 1.5rem; position: relative;">
+                <div>
+                    <div style="width: 50px; height: 50px; border-radius: 50%; background: rgba(16, 185, 129, 0.2); border: 1px solid var(--primary); display: flex; align-items: center; justify-content: center; margin: 0 auto 0.75rem auto; font-size: 1.3rem;">
+                        1
+                    </div>
+                    <h5 style="color: #fff; margin-bottom: 0.35rem;">IoT Probe In-Ground</h5>
+                    <p class="card-desc" style="font-size: 0.78rem;">Reads impedance & analog signals every 10s</p>
+                </div>
+
+                <div>
+                    <div style="width: 50px; height: 50px; border-radius: 50%; background: rgba(14, 165, 233, 0.2); border: 1px solid var(--water); display: flex; align-items: center; justify-content: center; margin: 0 auto 0.75rem auto; font-size: 1.3rem;">
+                        2
+                    </div>
+                    <h5 style="color: #fff; margin-bottom: 0.35rem;">Wi-Fi JSON Telemetry</h5>
+                    <p class="card-desc" style="font-size: 0.78rem;">Transmits payload to Flask REST endpoints</p>
+                </div>
+
+                <div>
+                    <div style="width: 50px; height: 50px; border-radius: 50%; background: rgba(245, 158, 11, 0.2); border: 1px solid var(--accent); display: flex; align-items: center; justify-content: center; margin: 0 auto 0.75rem auto; font-size: 1.3rem;">
+                        3
+                    </div>
+                    <h5 style="color: #fff; margin-bottom: 0.35rem;">Agronomy Engine</h5>
+                    <p class="card-desc" style="font-size: 0.78rem;">Normalizes NPK & cross-references 20 crops</p>
+                </div>
+
+                <div>
+                    <div style="width: 50px; height: 50px; border-radius: 50%; background: rgba(168, 85, 247, 0.2); border: 1px solid var(--purple); display: flex; align-items: center; justify-content: center; margin: 0 auto 0.75rem auto; font-size: 1.3rem;">
+                        4
+                    </div>
+                    <h5 style="color: #fff; margin-bottom: 0.35rem;">Farmer Action Plan</h5>
+                    <p class="card-desc" style="font-size: 0.78rem;">Instant dosage per acre & printable dossier</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center">
+            <a href="/test" class="btn btn-primary" style="padding: 0.85rem 2.2rem;">
+                <span>Try Soil Diagnostics Now</span>
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

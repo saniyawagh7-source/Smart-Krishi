@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container reveal">
+    <!-- Header -->
+    <div style="display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 1.5rem; margin-bottom: 2.5rem;">
+        <div>
+            <span class="badge optimal" style="margin-bottom: 0.5rem;">Agricultural Knowledge Repository</span>
+            <h2 style="margin: 0;">20 Indian Crops Database</h2>
+            <p class="subhead" style="margin-top: 0.25rem;">
+                Scientifically calibrated soil pH, macronutrient, moisture, and seed metrics for Indian climate zones.
+            </p>
+        </div>
+
+        <!-- Live Instant Search Bar -->
+        <div style="min-width: 280px; position: relative;">
+            <input type="text" id="crop-search" placeholder="🔍 Search crop (e.g., Wheat, Rice, Cotton)..." style="padding-left: 1.25rem;">
+        </div>
+    </div>
+
+    <!-- Season Filter Pill Tabs -->
+    <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 2rem;">
+        <button type="button" class="btn btn-primary season-filter-btn active" data-season="all" style="padding: 0.45rem 1.25rem; font-size: 0.85rem;">
+            All Crops (20)
+        </button>
+        <button type="button" class="btn btn-outline season-filter-btn" data-season="kharif" style="padding: 0.45rem 1.25rem; font-size: 0.85rem;">
+            🌧️ Kharif (Monsoon)
+        </button>
+        <button type="button" class="btn btn-outline season-filter-btn" data-season="rabi" style="padding: 0.45rem 1.25rem; font-size: 0.85rem;">
+            ❄️ Rabi (Winter)
+        </button>
+        <button type="button" class="btn btn-outline season-filter-btn" data-season="annual" style="padding: 0.45rem 1.25rem; font-size: 0.85rem;">
+            ☀️ Annual / Zaid
+        </button>
+    </div>
+    
+    <!-- Crops Interactive Grid -->
+    <div class="grid-3 mt-2" id="crops-grid">
+        {% for c in crops %}
+        <div class="glass-card crop-guide-card" data-name="{{ c['name'] }}" data-season="{{ c['season'] }}" style="display: flex; flex-direction: column; justify-content: space-between; transition: all 0.3s ease;">
+            <div>
+                <!-- Card Header -->
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem;">
+                    <div>
+                        <h3 class="crop-name" style="color: #fff; font-size: 1.85rem; margin: 0; font-weight: 800;">
+                            {{ c['name'] }}
+                        </h3>
+                        <span class="badge" style="background: rgba(16, 185, 129, 0.15); color: var(--primary-light); margin-top: 0.35rem;">
+                            {{ c['season'] }} Crop
+                        </span>
+                    </div>
+                    <span class="badge" style="background: rgba(14, 165, 233, 0.15); color: var(--water); font-size: 0.72rem;">
+                        💧 {{ c['water_need'] }} Water
+                    </span>
+                </div>
+
+                <!-- Parameters Box -->
+                <div style="background: rgba(8, 20, 12, 0.65); border: 1px solid var(--glass-border); padding: 1.15rem; border-radius: var(--radius-md); margin-top: 1rem;">
+                    <div style="display: flex; justify-content: space-between; font-size: 0.88rem; margin-bottom: 0.45rem;">
+                        <span style="color: var(--text-muted);">Ideal Soil pH:</span>
+                        <strong style="color: var(--primary-light); font-family: 'Space Grotesk', monospace;">
+                            {{ c['req_ph'][0] }} - {{ c['req_ph'][1] }}
+                        </strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; font-size: 0.88rem; margin-bottom: 0.45rem;">
+                        <span style="color: var(--text-muted);">Moisture Saturation:</span>
+                        <strong style="color: var(--water); font-family: 'Space Grotesk', monospace;">
+                            {{ c['req_moisture'][0] }} - {{ c['req_moisture'][1] }}%
+                        </strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; font-size: 0.88rem;">
+                        <span style="color: var(--text-muted);">Growth Duration:</span>
+                        <strong style="color: var(--accent-light);">
+                            {{ c['duration'] }}
+                        </strong>
+                    </div>
+                </div>
+
+                <!-- Seed Info -->
+                <div style="margin-top: 1.25rem;">
+                    <p style="font-size: 0.82rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.35rem; font-weight: 700;">
+                        Recommended Varieties:
+                    </p>
+                    <p class="card-desc" style="font-size: 0.88rem; color: #CBD5E1; margin: 0;">
+                        {{ c['seed_info'] }}
+                    </p>
+                </div>
+            </div>
+
+            <div style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid rgba(255, 255, 255, 0.06); display: flex; justify-content: space-between; align-items: center;">
+                <span class="card-desc" style="font-size: 0.82rem;">Seed Dosage:</span>
+                <span class="data-num" style="color: var(--primary-light); font-size: 0.95rem;">{{ c['seed_rate'] }}</span>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

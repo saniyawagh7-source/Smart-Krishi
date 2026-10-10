@@ -1,0 +1,336 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container reveal" style="max-width: 1100px;">
+    <!-- Header -->
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 2rem;">
+        <div>
+            <span class="badge optimal" style="margin-bottom: 0.5rem;">Diagnostic Report #{{ test['id'] }}</span>
+            <h2 style="margin: 0;">Soil Intelligence Dossier</h2>
+            <p class="card-desc" style="margin: 0.2rem 0 0 0;">
+                Generated on {{ test['created_at'].split(' ')[0] if test['created_at'] else 'Today' }} • Source: {{ test['source'] or 'IoT Sensor' }}
+            </p>
+        </div>
+        <div class="flex" style="flex-wrap: wrap;">
+            <button onclick="window.print()" class="btn btn-outline" style="padding: 0.75rem 1.4rem;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><path d="M6 14h12v8H6z"/></svg>
+                <span>Print / PDF Dossier</span>
+            </button>
+            <a href="/feedback?test_id={{ test['id'] }}" class="btn btn-primary" style="padding: 0.75rem 1.5rem;">
+                <span>★ Rate Recommendations</span>
+            </a>
+        </div>
+    </div>
+    
+    <!-- TOP CROP RECOMMENDATION SPOTLIGHT (CENTERPIECE) -->
+    <div class="glass-card mb-2" style="border: 1px solid var(--primary); background: linear-gradient(135deg, rgba(16, 185, 129, 0.12) 0%, rgba(11, 26, 16, 0.85) 60%);">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 2rem;">
+            <!-- Crop Info -->
+            <div style="max-width: 600px;">
+                <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem;">
+                    <span class="badge optimal" style="font-size: 0.82rem;">Top Recommended Crop</span>
+                    <span class="badge" style="background: rgba(245, 158, 11, 0.15); color: var(--accent); border: 1px solid rgba(245, 158, 11, 0.3);">
+                        {{ top_crop['season'] }} Crop
+                    </span>
+                </div>
+                <h1 class="crop-name" style="color: #fff; font-size: clamp(2.5rem, 5vw, 3.8rem); margin: 0 0 0.5rem 0; font-weight: 800; line-height: 1.1;">
+                    {{ top_crop['name'] }}
+                </h1>
+                <p class="card-desc" style="color: var(--text-body); font-size: 1.05rem; margin-bottom: 1.25rem;">
+                    Ideal match for your soil's current Nitrogen, Phosphorus, Potassium, and pH balance.
+                </p>
+
+                <!-- Crop Meta Badges -->
+                <div class="flex" style="gap: 1.5rem; flex-wrap: wrap;">
+                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <span style="font-size: 1.2rem;">⏱️</span>
+                        <div>
+                            <p class="card-desc" style="font-size: 0.75rem; margin: 0;">Growth Cycle</p>
+                            <strong style="color: #fff; font-size: 0.95rem;">{{ top_crop['duration'] }}</strong>
+                        </div>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <span style="font-size: 1.2rem;">💧</span>
+                        <div>
+                            <p class="card-desc" style="font-size: 0.75rem; margin: 0;">Water Need</p>
+                            <strong style="color: var(--water); font-size: 0.95rem;">{{ top_crop['water_need'] }}</strong>
+                        </div>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <span style="font-size: 1.2rem;">⚖️</span>
+                        <div>
+                            <p class="card-desc" style="font-size: 0.75rem; margin: 0;">Seed Rate</p>
+                            <strong style="color: var(--accent-light); font-size: 0.95rem;">{{ top_crop['seed_rate'] }}</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Radial Animated Match Score Gauge -->
+            <div style="text-align: center; display: flex; flex-direction: column; align-items: center;">
+                <p class="card-desc" style="font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.75rem; color: var(--primary-light);">
+                    Suitability Index
+                </p>
+                <div class="circle-gauge" data-percent="{{ rec['match_percent'] }}" style="width: 140px; height: 140px;">
+                    <svg viewBox="0 0 100 100">
+                        <circle class="circle-bg" cx="50" cy="50" r="45"></circle>
+                        <circle class="circle-bar" cx="50" cy="50" r="45" style="stroke: var(--primary); filter: drop-shadow(0 0 12px var(--primary));"></circle>
+                    </svg>
+                    <div class="circle-gauge-text">
+                        <span class="data-num" style="font-size: 2.2rem; color: #fff; font-weight: 800;">
+                            <span class="count-up" data-val="{{ rec['match_percent'] }}">0</span>%
+                        </span>
+                        <span style="font-size: 0.75rem; color: var(--primary-light); text-transform: uppercase;">Match</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Seed Selection Guidance -->
+        <div style="margin-top: 1.75rem; padding: 1.25rem; background: rgba(8, 20, 12, 0.65); border: 1px solid var(--glass-border); border-radius: var(--radius-md);">
+            <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.4rem;">
+                <span style="color: var(--primary-light);">🌱</span>
+                <strong style="color: #fff; font-size: 0.95rem;">Recommended Certified Seed Varieties:</strong>
+            </div>
+            <p class="card-desc" style="margin: 0; color: #CBD5E1;">
+                {{ top_crop['seed_info'] }}
+            </p>
+        </div>
+    </div>
+
+    <!-- SOIL NUTRIENT STATUS MATRIX -->
+    <h3 class="mt-2 mb-1">Live Soil Status vs Benchmarks</h3>
+    <div class="grid-3 mb-2">
+        <!-- Nitrogen -->
+        <div class="glass-card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+                <h4 style="margin: 0; font-size: 1.05rem;">Nitrogen (N)</h4>
+                <span class="badge {{ status['N']|lower }}">{{ status['N'] }}</span>
+            </div>
+            <p class="data-num" style="font-size: 2.2rem; color: #fff; margin: 0;">
+                {{ test['n'] }} <span style="font-size: 1rem; color: var(--text-muted);">kg/ha</span>
+            </p>
+            <!-- Progress Bar -->
+            <div style="height: 6px; background: rgba(255,255,255,0.08); border-radius: 3px; overflow: hidden; margin-top: 0.75rem;">
+                <div style="width: {{ [((test['n'] / 350) * 100), 100]|min }}%; height: 100%; background: var(--primary); border-radius: 3px;"></div>
+            </div>
+            <p class="card-desc" style="font-size: 0.78rem; margin-top: 0.5rem;">Target range: 120 - 280 kg/ha</p>
+        </div>
+
+        <!-- Phosphorus -->
+        <div class="glass-card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+                <h4 style="margin: 0; font-size: 1.05rem;">Phosphorus (P)</h4>
+                <span class="badge {{ status['P']|lower }}">{{ status['P'] }}</span>
+            </div>
+            <p class="data-num" style="font-size: 2.2rem; color: #fff; margin: 0;">
+                {{ test['p'] }} <span style="font-size: 1rem; color: var(--text-muted);">kg/ha</span>
+            </p>
+            <div style="height: 6px; background: rgba(255,255,255,0.08); border-radius: 3px; overflow: hidden; margin-top: 0.75rem;">
+                <div style="width: {{ [((test['p'] / 80) * 100), 100]|min }}%; height: 100%; background: var(--accent); border-radius: 3px;"></div>
+            </div>
+            <p class="card-desc" style="font-size: 0.78rem; margin-top: 0.5rem;">Target range: 25 - 60 kg/ha</p>
+        </div>
+
+        <!-- Potassium -->
+        <div class="glass-card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+                <h4 style="margin: 0; font-size: 1.05rem;">Potassium (K)</h4>
+                <span class="badge {{ status['K']|lower }}">{{ status['K'] }}</span>
+            </div>
+            <p class="data-num" style="font-size: 2.2rem; color: #fff; margin: 0;">
+                {{ test['k'] }} <span style="font-size: 1rem; color: var(--text-muted);">kg/ha</span>
+            </p>
+            <div style="height: 6px; background: rgba(255,255,255,0.08); border-radius: 3px; overflow: hidden; margin-top: 0.75rem;">
+                <div style="width: {{ [((test['k'] / 250) * 100), 100]|min }}%; height: 100%; background: var(--water); border-radius: 3px;"></div>
+            </div>
+            <p class="card-desc" style="font-size: 0.78rem; margin-top: 0.5rem;">Target range: 100 - 200 kg/ha</p>
+        </div>
+    </div>
+
+    <!-- DYNAMIC INTERACTIVE FERTILIZER ACREAGE CALCULATOR -->
+    <h3 class="mt-2 mb-1">Precision Fertilizer Plan & Farm Size Calculator</h3>
+    <div class="glass-card mb-2" style="border: 1px solid var(--glass-border-bright);">
+        <!-- Acreage Interactive Slider -->
+        <div style="background: rgba(16, 185, 129, 0.08); border: 1px solid var(--glass-border); border-radius: var(--radius-md); padding: 1.25rem; margin-bottom: 1.5rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1.5rem;">
+            <div style="flex: 1; min-width: 250px;">
+                <label style="font-weight: 700; color: #fff; display: block; margin-bottom: 0.5rem;">
+                    🌾 Adjust Your Farm Plot Size:
+                </label>
+                <input type="range" id="acre-slider" min="0.5" max="25" step="0.5" value="1" style="width: 100%;">
+            </div>
+            <div style="text-align: right; min-width: 120px;">
+                <p class="card-desc" style="margin: 0; font-size: 0.8rem; color: var(--primary-light);">TOTAL AREA</p>
+                <p class="data-num" style="font-size: 2rem; color: #fff; margin: 0;">
+                    <span id="acre-display">1.0</span> <span style="font-size: 1rem; color: var(--text-muted);">Acres</span>
+                </p>
+            </div>
+        </div>
+
+        <!-- Hidden base per-acre values -->
+        <input type="hidden" id="base-urea" value="{{ fert_plan['urea_kg_acre'] }}">
+        <input type="hidden" id="base-dap" value="{{ fert_plan['dap_kg_acre'] }}">
+        <input type="hidden" id="base-mop" value="{{ fert_plan['mop_kg_acre'] }}">
+
+        <!-- Dynamic Output Table -->
+        <div style="overflow-x: auto;">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Chemical Fertilizer</th>
+                        <th>Required Quantity</th>
+                        <th>Application Timing & Method</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <strong style="color: #fff; font-size: 1.05rem;">Urea (46% Nitrogen)</strong>
+                            <p class="card-desc" style="font-size: 0.78rem; margin: 0;">Fast-acting leaf canopy growth</p>
+                        </td>
+                        <td class="data-num" style="font-size: 1.5rem; color: var(--primary-light);">
+                            <span id="out-urea">{{ fert_plan['urea_kg_acre'] }}</span> kg
+                        </td>
+                        <td>Split: 50% at basal sowing, 50% top-dressing after first irrigation</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong style="color: #fff; font-size: 1.05rem;">DAP (18-46-0 Phosphorus)</strong>
+                            <p class="card-desc" style="font-size: 0.78rem; margin: 0;">Deep root network establishment</p>
+                        </td>
+                        <td class="data-num" style="font-size: 1.5rem; color: var(--accent-light);">
+                            <span id="out-dap">{{ fert_plan['dap_kg_acre'] }}</span> kg
+                        </td>
+                        <td>100% Basal dose applied along seed furrow at sowing</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong style="color: #fff; font-size: 1.05rem;">MOP (60% Potassium)</strong>
+                            <p class="card-desc" style="font-size: 0.78rem; margin: 0;">Pest resistance & grain weight</p>
+                        </td>
+                        <td class="data-num" style="font-size: 1.5rem; color: var(--water);">
+                            <span id="out-mop">{{ fert_plan['mop_kg_acre'] }}</span> kg
+                        </td>
+                        <td>100% Basal dose incorporated into topsoil before planting</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Agronomic Tips -->
+        <div style="margin-top: 1.75rem; padding: 1.25rem; background: rgba(8, 20, 12, 0.5); border-radius: var(--radius-md); border-left: 4px solid var(--accent);">
+            <h4 style="color: var(--accent-light); margin-bottom: 0.5rem;">Expert Agronomist Insights:</h4>
+            <ul style="margin-left: 1.25rem;" class="card-desc">
+                <li style="margin-bottom: 0.4rem; color: #CBD5E1;">{{ fert_plan['organic_tips'] }}</li>
+                {% if fert_plan['ph_tips'] %}
+                <li style="margin-bottom: 0.4rem; color: var(--warn); font-weight: 600;">⚠️ {{ fert_plan['ph_tips'] }}</li>
+                {% endif %}
+                <li style="color: #94A3B8;">{{ fert_plan['note'] }}</li>
+            </ul>
+        </div>
+    </div>
+    
+    <!-- RADAR CHART COMPONENT -->
+    <div class="glass-card mt-2 mb-2">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+            <div>
+                <h3 style="margin: 0;">Soil vs. Ideal Benchmark Radar</h3>
+                <p class="card-desc" style="margin: 0; font-size: 0.85rem;">Multivariate nutrient and environmental balance comparison</p>
+            </div>
+            <span class="badge" style="background: rgba(16, 185, 129, 0.15); color: var(--primary-light);">AI Normalized 0-100</span>
+        </div>
+        <div style="position: relative; height: 380px;">
+            <canvas id="radarChart"></canvas>
+        </div>
+    </div>
+    
+    <!-- Action Footer -->
+    <div class="text-center mt-3 mb-2 flex flex-center" style="gap: 1rem; flex-wrap: wrap;">
+        <a href="/test" class="btn btn-primary" style="padding: 0.9rem 2.2rem;">
+            <span>🔬 Test Another Field Sample</span>
+        </a>
+        <a href="/history" class="btn btn-outline" style="padding: 0.9rem 1.8rem;">
+            <span>View Historical Tests</span>
+        </a>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Radar Chart Initialization with Dark Luxury Aesthetics
+    const ctx = document.getElementById('radarChart').getContext('2d');
+    
+    const currentData = [
+        Math.min(100, Math.round({{ test['n'] }} / 350 * 100)), 
+        Math.min(100, Math.round({{ test['p'] }} / 80 * 100)), 
+        Math.min(100, Math.round({{ test['k'] }} / 250 * 100)), 
+        Math.min(100, Math.round({{ test['ph'] }} / 14 * 100)), 
+        Math.min(100, Math.round({{ test['moisture'] }}))
+    ];
+    
+    const idealN = ({{ top_crop['req_n'][0] }} + {{ top_crop['req_n'][1] }}) / 2;
+    const idealP = ({{ top_crop['req_p'][0] }} + {{ top_crop['req_p'][1] }}) / 2;
+    const idealK = ({{ top_crop['req_k'][0] }} + {{ top_crop['req_k'][1] }}) / 2;
+    const idealpH = ({{ top_crop['req_ph'][0] }} + {{ top_crop['req_ph'][1] }}) / 2;
+    const idealM = ({{ top_crop['req_moisture'][0] }} + {{ top_crop['req_moisture'][1] }}) / 2;
+    
+    const idealData = [
+        Math.min(100, Math.round(idealN / 350 * 100)),
+        Math.min(100, Math.round(idealP / 80 * 100)),
+        Math.min(100, Math.round(idealK / 250 * 100)),
+        Math.min(100, Math.round(idealpH / 14 * 100)),
+        Math.min(100, Math.round(idealM))
+    ];
+
+    new Chart(ctx, {
+        type: 'radar',
+        data: {
+            labels: ['Nitrogen (N)', 'Phosphorus (P)', 'Potassium (K)', 'pH Level', 'Moisture %'],
+            datasets: [{
+                label: 'Your Field Soil',
+                data: currentData,
+                backgroundColor: 'rgba(245, 158, 11, 0.25)',
+                borderColor: '#F59E0B',
+                borderWidth: 2.5,
+                pointBackgroundColor: '#F59E0B',
+                pointBorderColor: '#fff',
+                pointHoverRadius: 6
+            }, {
+                label: 'Ideal for {{ top_crop["name"] }}',
+                data: idealData,
+                backgroundColor: 'rgba(16, 185, 129, 0.25)',
+                borderColor: '#10B981',
+                borderWidth: 2.5,
+                pointBackgroundColor: '#10B981',
+                pointBorderColor: '#fff',
+                pointHoverRadius: 6
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                r: {
+                    angleLines: { color: 'rgba(52, 211, 153, 0.15)' },
+                    grid: { color: 'rgba(52, 211, 153, 0.12)' },
+                    pointLabels: {
+                        color: '#E2E8F0',
+                        font: { size: 12, family: "'Plus Jakarta Sans', sans-serif", weight: 600 }
+                    },
+                    suggestedMin: 0,
+                    suggestedMax: 100,
+                    ticks: { display: false }
+                }
+            },
+            plugins: {
+                legend: {
+                    labels: {
+                        color: '#F1F5F0',
+                        font: { family: "'Plus Jakarta Sans', sans-serif", size: 13, weight: 600 }
+                    }
+                }
+            }
+        }
+    });
+</script>
+{% endblock %}
